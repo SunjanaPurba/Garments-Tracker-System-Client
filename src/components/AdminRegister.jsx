@@ -1,4 +1,3 @@
-// client/src/components/AdminRegister.jsx (শুধু ডেভেলপমেন্টের জন্য)
 import { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -16,7 +15,7 @@ const AdminRegister = () => {
 
     try {
       const response = await axios.put(
-        "http://localhost:5000/api/users",
+        "https://garments-tracker-system-server-wine.vercel.app/api/users",
         formData
       );
       toast.success(`✅ ${formData.role} user created: ${response.data.email}`);

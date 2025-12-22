@@ -1,24 +1,3 @@
-// import { Navigate, Outlet } from "react-router-dom";
-// import { useAuth } from "../context/AuthContext";
-// import LoadingSpinner from "./LoadingSpinner";
-
-// const PrivateRoute = ({ requiredRole }) => {
-//   const { user, loading } = useAuth();
-
-//   if (loading) return <LoadingSpinner />;
-
-//   if (!user) return <Navigate to="/login" replace />;
-
-//   if (requiredRole && user.role !== requiredRole) {
-//     return <Navigate to="/dashboard" replace />;
-//   }
-
-//   return <Outlet />;
-// };
-
-// export default PrivateRoute;
-
-
 import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import LoadingSpinner from "./LoadingSpinner";
@@ -39,9 +18,7 @@ const PrivateRoute = ({ children, requiredRole }) => {
   // Check if user is suspended
   if (user.status === "suspended") {
     // Define allowed routes for suspended users
-    const allowedRoutes = [
-      "/dashboard/profile",
-    ];
+    const allowedRoutes = ["/dashboard/profile"];
 
     // Add role-specific allowed routes
     if (user.role === "buyer") {
@@ -54,7 +31,7 @@ const PrivateRoute = ({ children, requiredRole }) => {
     }
 
     // Check if current route is allowed
-    const isRouteAllowed = allowedRoutes.some(route => 
+    const isRouteAllowed = allowedRoutes.some((route) =>
       location.pathname.startsWith(route)
     );
 
@@ -70,11 +47,13 @@ const PrivateRoute = ({ children, requiredRole }) => {
               <p className="text-gray-600 mt-2">
                 Your account has been temporarily suspended.
               </p>
-              
+
               {user.suspendFeedback && (
                 <div className="mt-4 p-4 bg-red-50 rounded-lg">
                   <p className="font-medium">Reason:</p>
-                  <p className="text-sm text-gray-700">{user.suspendFeedback}</p>
+                  <p className="text-sm text-gray-700">
+                    {user.suspendFeedback}
+                  </p>
                 </div>
               )}
 
