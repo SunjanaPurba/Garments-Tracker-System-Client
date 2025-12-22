@@ -34,7 +34,7 @@ const AllProducts = () => {
 
   const limit = 9;
   const API_URL =
-    import.meta.env.VITE_REACT_APP_SERVER_URL || "http://localhost:5000";
+    import.meta.env.VITE_REACT_APP_SERVER_URL || "https://garments-tracker-system-server-wine.vercel.app";
 
   const categories = [
     { value: "all", label: "All Categories" },
