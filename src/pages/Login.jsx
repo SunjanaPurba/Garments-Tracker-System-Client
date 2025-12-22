@@ -17,7 +17,7 @@ const Login = () => {
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm();
-  const API_URL = import.meta.env.VITE_REACT_APP_SERVER_URL;
+  const API_URL = import.meta.env.VITE_REACT_APP_SERVER_URL || "https://garments-tracker-system-server-wine.vercel.app";
 
   // ✅ Admin/Manager emails list
   const adminManagerEmails = {
