@@ -1,3 +1,5 @@
+
+
 // import { createContext, useContext, useEffect, useState } from "react";
 // import {
 //   GoogleAuthProvider,
@@ -17,9 +19,8 @@
 //   const [loading, setLoading] = useState(true);
 
 //   const googleProvider = new GoogleAuthProvider();
-//   const API_URL = import.meta.env.VITE_REACT_APP_SERVER_URL;
+//   const API_URL = import.meta.env.VITE_SERVER_URL || import.meta.env.VITE_REACT_APP_SERVER_URL;
 
-//   // Firebase auth functions
 //   const register = (email, password) =>
 //     createUserWithEmailAndPassword(auth, email, password);
 
@@ -34,7 +35,7 @@
 //     localStorage.removeItem("access-token");
 //   };
 
-//   // Axios global config
+//   // Set default credentials
 //   axios.defaults.withCredentials = true;
 
 //   useEffect(() => {
@@ -43,30 +44,48 @@
 
 //       if (currentUser?.email) {
 //         try {
-//           // Get JWT from backend
-//           const jwtRes = await axios.post(`${API_URL}/jwt`, {
-//             email: currentUser.email,
+//           // Attempt to get JWT - gracefully handle 404 or any error
+//           const jwtRes = await axios.post(
+//             `${API_URL}/jwt`,
+//             { email: currentUser.email },
+//             { timeout: 8000 }
+//           ).catch((err) => {
+//             if (err.response?.status === 404) {
+//               console.warn("JWT endpoint not found (404) - continuing as guest or public mode");
+//               return { data: { token: null } };
+//             }
+//             throw err;
 //           });
 
-//           const token = jwtRes.data.token;
-//           if (!token) throw new Error("No token returned from server");
+//           const token = jwtRes.data?.token;
 
-//           localStorage.setItem("access-token", token);
+//           if (token) {
+//             localStorage.setItem("access-token", token);
 
-//           // Fetch full user data
-//           const userRes = await axios.get(`${API_URL}/users/me`, {
-//             headers: {
-//               Authorization: `Bearer ${token}`,
-//             },
-//           });
+//             // Fetch full user profile if token exists
+//             const userRes = await axios.get(`${API_URL}/users/me`, {
+//               headers: { Authorization: `Bearer ${token}` },
+//             });
 
-//           setUser(userRes.data);
+//             setUser(userRes.data);
+//           } else {
+//             // No token needed or backend doesn't use JWT → just use Firebase user
+//             setUser({
+//               email: currentUser.email,
+//               displayName: currentUser.displayName,
+//               photoURL: currentUser.photoURL,
+//               uid: currentUser.uid,
+//             });
+//           }
 //         } catch (err) {
-//           console.error(
-//             "Auth state error:",
-//             err.response?.data?.message || err.message
-//           );
-//           setUser(null);
+//           console.error("Auth error:", err.response?.data?.message || err.message);
+//           // On any auth-related error, fall back to minimal user info
+//           setUser({
+//             email: currentUser.email,
+//             displayName: currentUser.displayName || "User",
+//             photoURL: currentUser.photoURL,
+//             uid: currentUser.uid,
+//           });
 //           localStorage.removeItem("access-token");
 //         }
 //       } else {
@@ -91,11 +110,14 @@
 //   };
 
 //   return (
-//     <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>
+//     <AuthContext.Provider value={authInfo}>
+//       {children}
+//     </AuthContext.Provider>
 //   );
 // };
 
 // export const useAuth = () => useContext(AuthContext);
+
 
 
 import { createContext, useContext, useEffect, useState } from "react";
@@ -117,7 +139,9 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   const googleProvider = new GoogleAuthProvider();
-  const API_URL = import.meta.env.VITE_SERVER_URL || import.meta.env.VITE_REACT_APP_SERVER_URL;
+  
+  // ✅ FIXED: Use your Render server URL
+  const API_URL = "https://garments-tracker-system-server.onrender.com/api";
 
   const register = (email, password) =>
     createUserWithEmailAndPassword(auth, email, password);

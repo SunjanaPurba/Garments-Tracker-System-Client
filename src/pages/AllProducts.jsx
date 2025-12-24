@@ -881,7 +881,7 @@ const AllProducts = () => {
 
   const limit = 9;
   // FIXED: Use VITE_SERVER_URL instead of VITE_REACT_APP_SERVER_URL
-  const API_URL = import.meta.env.VITE_SERVER_URL || "https://garments-tracker-system-server-wine.vercel.app/api";
+ const API_URL = import.meta.env.VITE_SERVER_URL || "https://garments-tracker-system-server.onrender.com/api";
 
   const categories = [
     { value: "all", label: "All Categories" },
