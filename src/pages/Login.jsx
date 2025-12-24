@@ -17,7 +17,9 @@ const Login = () => {
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm();
-  const API_URL = import.meta.env.VITE_REACT_APP_SERVER_URL || "https://garments-tracker-system-server-wine.vercel.app";
+  
+  // ✅ FIXED: আপনার Render সার্ভার URL ব্যবহার করুন
+  const API_URL = "https://garments-tracker-system-server.onrender.com/api";
 
   // ✅ Admin/Manager emails list
   const adminManagerEmails = {
