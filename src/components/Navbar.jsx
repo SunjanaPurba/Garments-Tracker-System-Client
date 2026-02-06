@@ -33,7 +33,6 @@ const Navbar = ({ toggleTheme, theme }) => {
 
   const isActive = (path) => location.pathname === path;
 
-  // Navigation links for both states
   const commonLinks = [
     { path: "/", label: "Home", icon: <FaHome /> },
     { path: "/all-products", label: "Products", icon: <FaBox /> },

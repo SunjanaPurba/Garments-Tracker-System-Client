@@ -1,0 +1,15 @@
+# render.yaml
+services:
+  - type: web
+    name: garments-tracker-system-client
+    env: static
+    buildCommand: npm run build
+    staticPublishPath: ./dist
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    headers:
+      - path: /*
+        name: Cache-Control
+        value: no-cache
